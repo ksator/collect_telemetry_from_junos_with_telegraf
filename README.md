@@ -2,6 +2,26 @@
 
 This is not covered in this repository
 
+# Junos
+```
+jcluser@vMX-1> show version | match "na telemetry"
+JUNOS na telemetry [18.2R1.9-C1]
+```
+```
+jcluser@vMX-1> show version | match openconfig
+JUNOS Openconfig [0.0.0.10-1]
+```
+```
+jcluser@vMX-1> show configuration system services netconf | display set
+set system services netconf ssh
+```
+```
+jcluser@vMX-1> show configuration system services extension-service | display set
+set system services extension-service request-response grpc clear-text port 32768
+set system services extension-service request-response grpc skip-authentication
+set system services extension-service notification allow-clients address 0.0.0.0/0
+```
+
 # influxdb
 
 pull docker images 
