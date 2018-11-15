@@ -2,7 +2,7 @@
 
 collect openconfig telemetry from junos devices using telegraf.  
 store collected data in influxdb  
-query influxdb database  
+query influxdb database with cli and python to extract data   
 
 # requirements 
 
