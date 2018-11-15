@@ -142,7 +142,7 @@ for troubleshooting purposes you can run this command
 ```
 docker logs telegraf
 ```
-start a shell session in the influxdb container
+start a shell session in the telegraf container
 ```
 docker exec -it telegraf bash
 ```
@@ -154,10 +154,42 @@ exit the telegraf container
 ```
 exit
 ```
-# Verify
-
-query the influxdb database
+# query the influxdb database to verify
+start a shell session in the influxdb container
+```
+docker exec -it influxdb bash
+```
+query the database
+```
+# influx
+Connected to http://localhost:8086 version 1.7.0
+InfluxDB shell version: 1.7.0
+Enter an InfluxQL query
+> show databases
+name: databases
+name
+----
+_internal
+juniper
+> use juniper
+Using database juniper
+> show measurements
+name: measurements
+name
+----
 ```
 ```
-
-
+> select * from "/interfaces/" order by desc limit 1
+```
+```
+> select * from "/network-instances/network-instance/protocols/protocol/bgp/" order by desc limit 1
+```
+exit 
+```
+> exit
+#
+```
+exit the influxdb container
+```
+# exit 
+```
