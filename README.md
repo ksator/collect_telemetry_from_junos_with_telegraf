@@ -37,31 +37,31 @@ set system services extension-service notification allow-clients address 0.0.0.0
 
 pull docker images 
 ```
-docker pull influxdb
+$ docker pull influxdb
 ```
 Verify
 ```
-docker images influxdb
+$ docker images influxdb
 ```
 Instanciate an influxdb container
 ```
-docker run -d --name influxdb -p 8083:8083 -p 8086:8086 influxdb
+$ docker run -d --name influxdb -p 8083:8083 -p 8086:8086 influxdb
 ```
 Verify
 ```
-docker ps | grep influxdb
+$ docker ps | grep influxdb
 ```
 for troubleshooting purposes you can run this command
 ```
-docker logs influxdb
+$ docker logs influxdb
 ```
 start a shell session in the influxdb container
 ```
-docker exec -it influxdb bash
+$ docker exec -it influxdb bash
 ```
-influxdb configuration file
+run this command to read the influxdb configuration file
 ```
-more /etc/influxdb/influxdb.conf
+# more /etc/influxdb/influxdb.conf
 ```
 create a user and a database
 ```
@@ -86,31 +86,31 @@ influx false
 ```
 exit the influxdb container
 ```
-exit
+# exit
 ```
 
 # telegraf
 
 get ip address used by containers
 ```
-ifconfig docker0
+$ ifconfig docker0
 ```
 
 pull docker images 
 ```
-docker pull telegraf
+$ docker pull telegraf
 ```
 Verify
 ```
-docker images telegraf
+$ docker images telegraf
 ```
 
 create a telegraf configuration file
 ```
-vi telegraf.conf
+$ vi telegraf.conf
 ```
 ```
-more telegraf
+$ more telegraf
 [[inputs.jti_openconfig_telemetry]]
   servers = ["172.30.52.156:50051"]
   username = "lab"
@@ -132,32 +132,32 @@ more telegraf
 ```
 instanciate a telegraf container
 ```
-docker run --name telegraf -d -v $PWD/telegraf.conf:/etc/telegraf/telegraf.conf:ro telegraf
+$ docker run --name telegraf -d -v $PWD/telegraf.conf:/etc/telegraf/telegraf.conf:ro telegraf
 ```
 verify
 ```
-docker ps | grep telegraf
+$ docker ps | grep telegraf
 ```
 for troubleshooting purposes you can run this command
 ```
-docker logs telegraf
+$ docker logs telegraf
 ```
 start a shell session in the telegraf container
 ```
-docker exec -it telegraf bash
+$ docker exec -it telegraf bash
 ```
 verify the telegraf configuration file
 ```
-more /etc/telegraf/telegraf.conf
+# more /etc/telegraf/telegraf.conf
 ```
 exit the telegraf container
 ```
-exit
+# exit
 ```
 # query the influxdb database to verify
 start a shell session in the influxdb container
 ```
-docker exec -it influxdb bash
+$ docker exec -it influxdb bash
 ```
 query the database
 ```
