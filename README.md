@@ -4,6 +4,12 @@ collect openconfig telemetry from junos devices using telegraf.
 store collected data in influxdb  
 query influxdb database with cli and python to extract data   
 
+# about telegraf
+
+telegraf is an open source collector written in GO.  
+Telegraf collects data and writes them into a database.  
+It is plugin-driven (it has input plugins, output plugins, ...)  
+
 # requirements 
 
 ## docker
