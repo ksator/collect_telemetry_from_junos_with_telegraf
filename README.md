@@ -87,7 +87,7 @@ more telegraf
 ```
 instanciate a telegraf container
 ```
-docker run --name telegraf -v $PWD/telegraf.conf:/etc/telegraf/telegraf.conf:ro telegraf
+docker run --name telegraf -d -v $PWD/telegraf.conf:/etc/telegraf/telegraf.conf:ro telegraf
 ```
 verify
 ```
