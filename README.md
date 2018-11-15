@@ -104,11 +104,9 @@ Verify
 ```
 $ docker images telegraf
 ```
-
-create a telegraf configuration file (use this [file](telegraf.conf))
+create a telegraf configuration file ([use this file](telegraf.conf))
 ```
 $ vi telegraf.conf
-```
 ```
 instanciate a telegraf container
 ```
