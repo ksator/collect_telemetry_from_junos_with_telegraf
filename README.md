@@ -1,8 +1,19 @@
-# install docker
+# about this repo
 
+collect openconfig telemetry from junos devices using telegraf.  
+store collected data in influxdb  
+query influxdb database  
+
+# requirements 
+
+## docker
+
+you need to install docker.  
 This is not covered in this repository
 
-# Junos
+# Junos 
+
+here's some details from the junos devices   
 ```
 jcluser@vMX-1> show version | match "na telemetry"
 JUNOS na telemetry [18.2R1.9-C1]
