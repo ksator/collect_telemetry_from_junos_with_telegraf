@@ -105,30 +105,10 @@ Verify
 $ docker images telegraf
 ```
 
-create a telegraf configuration file
+create a telegraf configuration file (use this [file](telegraf.conf))
 ```
 $ vi telegraf.conf
 ```
-```
-$ more telegraf
-[[inputs.jti_openconfig_telemetry]]
-  servers = ["172.30.52.156:50051"]
-  username = "lab"
-  password = "m0naco"
-  client_id = "telegraf"
-  sample_frequency = "2000ms"
-  sensors = ["/interfaces/"]
-  retry_delay = "1000ms"
-  str_as_tags = false
-
-[[outputs.influxdb]]
-      urls = ["http://172.17.0.1:8086"]
-      database = "juniper"
-      precision = "s"
-      write_consistency = "any"
-      timeout = "5s"
-      username = "juniper"
-      password = "juniper"
 ```
 instanciate a telegraf container
 ```
