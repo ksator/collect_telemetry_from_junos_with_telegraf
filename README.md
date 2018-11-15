@@ -132,7 +132,7 @@ exit the telegraf container
 ```
 # exit
 ```
-# query the influxdb database to verify
+# query the influxdb database with cli to verify
 start a shell session in the influxdb container
 ```
 $ docker exec -it influxdb bash
@@ -171,3 +171,42 @@ exit the influxdb container
 ```
 # exit 
 ```
+# query the influxdb database with python to verify
+install the influxdb python library.
+This python library is a client for interacting with InfluxDB.
+```
+$ pip install influxdb
+```
+Verify
+```
+$ pip list | grep influx
+```
+you can now interact with InfluxDB using Python
+
+run this command to start a python interactive session
+
+```
+$ python
+```
+connect to InfluxDB using Python
+```
+>>> from influxdb import InfluxDBClient
+>>> influx_client = InfluxDBClient('localhost',8086)
+>>> influx_client.query('show databases')
+ResultSet({'(u'databases', None)': [{u'name': u'_internal'}, {u'name': u'juniper'}]})
+>>> influx_client.query('show measurements', database='juniper')
+ResultSet({'(u'measurements', None)': [{u'name': u'/interfaces/'}, {u'name': u'/network-instances/network-instance/protocols/protocol/bgp/'}]})
+>>> gp = influx_client.query('select * from "/interfaces/"  order by desc limit 2 ', database='juniper').get_points()
+>>> for item in gp:
+...     print item['/interfaces/interface/@name']
+...
+ge-0/0/7
+ge-0/0/6
+>>> gp = influx_client.query('select * from "/interfaces/"  order by desc limit 2 ', database='juniper').get_points()
+>>> for item in gp:
+...     print item['/interfaces/interface/subinterfaces/subinterface/state/counters/in-octets']
+...
+36
+26277618
+>>>
+
