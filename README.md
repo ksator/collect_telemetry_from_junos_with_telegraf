@@ -192,10 +192,19 @@ connect to InfluxDB using Python
 ```
 >>> from influxdb import InfluxDBClient
 >>> influx_client = InfluxDBClient('localhost',8086)
+```
+list the databases
+```
 >>> influx_client.query('show databases')
 ResultSet({'(u'databases', None)': [{u'name': u'_internal'}, {u'name': u'juniper'}]})
+```
+list measurements for a database
+```
 >>> influx_client.query('show measurements', database='juniper')
 ResultSet({'(u'measurements', None)': [{u'name': u'/interfaces/'}, {u'name': u'/network-instances/network-instance/protocols/protocol/bgp/'}]})
+```
+query data from a particular measurement and database
+```
 >>> gp = influx_client.query('select * from "/interfaces/"  order by desc limit 2 ', database='juniper').get_points()
 >>> for item in gp:
 ...     print item['/interfaces/interface/@name']
