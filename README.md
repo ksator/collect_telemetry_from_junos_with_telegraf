@@ -1,14 +1,16 @@
-install docker
+# install docker
 
-pull docker images for influxdb and telegraf
+This is not covered in this repository
+
+# influxdb
+
+pull docker images 
 ```
 docker pull influxdb
-docker pull telegraf
 ```
 Verify
 ```
 docker images influxdb
-docker images telegraf
 ```
 Instanciate an influxdb container
 ```
@@ -55,9 +57,21 @@ exit the influxdb container
 ```
 exit
 ```
+
+# telegraf
+
 get ip address used by containers
 ```
 ifconfig docker0
+```
+
+pull docker images 
+```
+docker pull telegraf
+```
+Verify
+```
+docker images telegraf
 ```
 
 create a telegraf configuration file
@@ -109,6 +123,8 @@ exit the telegraf container
 ```
 exit
 ```
+# Verify
+
 query the influxdb database
 ```
 ```
