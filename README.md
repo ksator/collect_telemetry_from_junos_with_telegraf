@@ -219,7 +219,7 @@ key                                                                             
 /network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.1.7
 >
 ```
-BGP groups name for device 100.123.1.0
+BGP groups for device 100.123.1.0
 ```
 > SHOW TAG VALUES FROM  "/network-instances/network-instance/protocols/protocol/bgp/" with KEY ="/network-instances/network-instance/protocols/protocol/bgp/peer-groups/peer-group/@peer-group-name" WHERE device='100.123.1.0'
 name: /network-instances/network-instance/protocols/protocol/bgp/
@@ -228,7 +228,7 @@ key                                                                             
 /network-instances/network-instance/protocols/protocol/bgp/peer-groups/peer-group/@peer-group-name underlay
 >
 ```
-BGP groups name
+BGP groups 
 ```
 > SHOW TAG VALUES FROM  "/network-instances/network-instance/protocols/protocol/bgp/" with KEY ="/network-instances/network-instance/protocols/protocol/bgp/peer-groups/peer-group/@peer-group-name"
 name: /network-instances/network-instance/protocols/protocol/bgp/
@@ -267,13 +267,93 @@ time                /network-instances/network-instance/protocols/protocol/bgp/n
 1545168048906507987 ESTABLISHED
 1545168048906507987 ESTABLISHED
 >
+```
+Total prefixes on device 100.123.1.4
+```
+> SELECT MEAN("/network-instances/network-instance/protocols/protocol/bgp/global/state/total-prefixes") FROM "/network-instances/network-instance/protocols/protocol/bgp/" WHERE "device" = '100.123.1.4'
+name: /network-instances/network-instance/protocols/protocol/bgp/
+time mean
+---- ----
+0    36
+>
+```
+Total prefixes on device 100.123.1.0 since one minute
+```
+> SELECT mean("/network-instances/network-instance/protocols/protocol/bgp/global/state/total-prefixes") FROM "/network-instances/network-instance/protocols/protocol/bgp/" WHERE ("device" = '100.123.1.0') AND time >= now() - 1m
+name: /network-instances/network-instance/protocols/protocol/bgp/
+time                mean
+----                ----
+1545168168469112825 44
+>
+```
+```
+> SELECT COUNT("/interfaces/interface/state/oper-status") FROM /interfaces/ WHERE "device" = '100.123.1.0' AND "/interfaces/interface/@name" = 'ge-0/0/0' AND "/interfaces/interface/state/oper-status" = 'UP' AND time >= now() - 1m GROUP BY time(10s)
+name: /interfaces/
+time                count
+----                -----
+1545168180000000000 1
+1545168190000000000 5
+1545168200000000000 5
+1545168210000000000 5
+1545168220000000000 5
+1545168230000000000 5
+1545168240000000000 4
+>
+```
+```
+> SELECT "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state",  "/network-instances/network-instance/protocols/protocol/bgp/global/state/total-prefixes" FROM "/network-instances/network-instance/protocols/protocol/bgp/" ORDER BY DESC LIMIT 4
+name: /network-instances/network-instance/protocols/protocol/bgp/
+time                /network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state /network-instances/network-instance/protocols/protocol/bgp/global/state/total-prefixes
+----                ------------------------------------------------------------------------------------------------- --------------------------------------------------------------------------------------
+1545168279586592682 ESTABLISHED
+1545168279586592682 ESTABLISHED
+1545168279586592682                                                                                                   44
+1545168279586592682 ESTABLISHED
+>
+```
+```
+> SELECT "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state", "/network-instances/network-instance/protocols/protocol/bgp/global/state/total-prefixes" FROM "/network-instances/network-instance/protocols/protocol/bgp/" WHERE "device" = '100.123.1.0' AND time >= now() - 10s
+name: /network-instances/network-instance/protocols/protocol/bgp/
+time                /network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state /network-instances/network-instance/protocols/protocol/bgp/global/state/total-prefixes
+----                ------------------------------------------------------------------------------------------------- --------------------------------------------------------------------------------------
+1545168296433372717 ESTABLISHED
+1545168296433372717                                                                                                   44
+1545168296433372717 ESTABLISHED
+1545168296433372717 ESTABLISHED
+1545168296433372717 ESTABLISHED
+1545168298425250176 ESTABLISHED
+1545168298425250176 ESTABLISHED
+1545168298425250176                                                                                                   44
+1545168298425250176 ESTABLISHED
+1545168298425250176 ESTABLISHED
+1545168300432730351 ESTABLISHED
+1545168300432730351 ESTABLISHED
+1545168300432730351 ESTABLISHED
+1545168300432730351 ESTABLISHED
+1545168300432730351                                                                                                   44
+1545168302438985906 ESTABLISHED
+1545168302438985906                                                                                                   44
+1545168302438985906 ESTABLISHED
+1545168302438985906 ESTABLISHED
+1545168302438985906 ESTABLISHED
+>
 
 ```
+
 ```
-> select * from "/interfaces/" order by desc limit 1
+> SELECT * FROM "/interfaces/" ORDER BY DESC LIMIT 1
 ```
 ```
-> select * from "/network-instances/network-instance/protocols/protocol/bgp/" order by desc limit 1
+> SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" ORDER BY DESC LIMIT 1
+```
+```
+SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" WHERE device='100.123.1.0' AND time >= now() - 10s
+```
+```
+SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" ORDER BY DESC LIMIT 2 
+```
+```
+SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" WHERE "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address" ='192.168.1.7' ORDER BY DESC LIMIT 1
 ```
 exit 
 ```
