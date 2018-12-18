@@ -326,7 +326,16 @@ time                /network-instances/network-instance/protocols/protocol/bgp/n
 1545168302438985906 ESTABLISHED
 >
 ```
+Others influxdb queries examples
 ```
+> SELECT * FROM "/interfaces/" ORDER BY DESC LIMIT 1
+...
+> SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" ORDER BY DESC LIMIT 1
+...
+> SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" WHERE device='100.123.1.0' AND time >= now() - 10s
+...
+> SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" WHERE "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address" ='192.168.1.7' ORDER BY DESC LIMIT 1
+...
 > SELECT COUNT("/interfaces/interface/state/oper-status") FROM /interfaces/ WHERE "device" = '100.123.1.0' AND "/interfaces/interface/@name" = 'ge-0/0/0' AND "/interfaces/interface/state/oper-status" = 'UP' AND time >= now() - 1m GROUP BY time(10s)
 name: /interfaces/
 time                count
@@ -339,21 +348,6 @@ time                count
 1545168230000000000 5
 1545168240000000000 4
 >
-```
-```
-> SELECT * FROM "/interfaces/" ORDER BY DESC LIMIT 1
-```
-```
-> SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" ORDER BY DESC LIMIT 1
-```
-```
-> SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" WHERE device='100.123.1.0' AND time >= now() - 10s
-```
-```
-> SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" ORDER BY DESC LIMIT 2 
-```
-```
-> SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" WHERE "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address" ='192.168.1.7' ORDER BY DESC LIMIT 1
 ```
 exit 
 ```
