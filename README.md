@@ -286,20 +286,7 @@ time                mean
 1545168168469112825 44
 >
 ```
-```
-> SELECT COUNT("/interfaces/interface/state/oper-status") FROM /interfaces/ WHERE "device" = '100.123.1.0' AND "/interfaces/interface/@name" = 'ge-0/0/0' AND "/interfaces/interface/state/oper-status" = 'UP' AND time >= now() - 1m GROUP BY time(10s)
-name: /interfaces/
-time                count
-----                -----
-1545168180000000000 1
-1545168190000000000 5
-1545168200000000000 5
-1545168210000000000 5
-1545168220000000000 5
-1545168230000000000 5
-1545168240000000000 4
->
-```
+Sessions state and total prefixes
 ```
 > SELECT "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state",  "/network-instances/network-instance/protocols/protocol/bgp/global/state/total-prefixes" FROM "/network-instances/network-instance/protocols/protocol/bgp/" ORDER BY DESC LIMIT 4
 name: /network-instances/network-instance/protocols/protocol/bgp/
@@ -311,6 +298,7 @@ time                /network-instances/network-instance/protocols/protocol/bgp/n
 1545168279586592682 ESTABLISHED
 >
 ```
+Sessions state and total prefixes since 10 secondes for device 100.123.1.0
 ```
 > SELECT "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state", "/network-instances/network-instance/protocols/protocol/bgp/global/state/total-prefixes" FROM "/network-instances/network-instance/protocols/protocol/bgp/" WHERE "device" = '100.123.1.0' AND time >= now() - 10s
 name: /network-instances/network-instance/protocols/protocol/bgp/
@@ -337,9 +325,21 @@ time                /network-instances/network-instance/protocols/protocol/bgp/n
 1545168302438985906 ESTABLISHED
 1545168302438985906 ESTABLISHED
 >
-
 ```
-
+```
+> SELECT COUNT("/interfaces/interface/state/oper-status") FROM /interfaces/ WHERE "device" = '100.123.1.0' AND "/interfaces/interface/@name" = 'ge-0/0/0' AND "/interfaces/interface/state/oper-status" = 'UP' AND time >= now() - 1m GROUP BY time(10s)
+name: /interfaces/
+time                count
+----                -----
+1545168180000000000 1
+1545168190000000000 5
+1545168200000000000 5
+1545168210000000000 5
+1545168220000000000 5
+1545168230000000000 5
+1545168240000000000 4
+>
+```
 ```
 > SELECT * FROM "/interfaces/" ORDER BY DESC LIMIT 1
 ```
@@ -347,13 +347,13 @@ time                /network-instances/network-instance/protocols/protocol/bgp/n
 > SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" ORDER BY DESC LIMIT 1
 ```
 ```
-SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" WHERE device='100.123.1.0' AND time >= now() - 10s
+> SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" WHERE device='100.123.1.0' AND time >= now() - 10s
 ```
 ```
-SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" ORDER BY DESC LIMIT 2 
+> SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" ORDER BY DESC LIMIT 2 
 ```
 ```
-SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" WHERE "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address" ='192.168.1.7' ORDER BY DESC LIMIT 1
+> SELECT * FROM "/network-instances/network-instance/protocols/protocol/bgp/" WHERE "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address" ='192.168.1.7' ORDER BY DESC LIMIT 1
 ```
 exit 
 ```
