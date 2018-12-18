@@ -164,6 +164,111 @@ name: measurements
 name
 ----
 ```
+All devices
+```
+> SHOW TAG VALUES FROM  "/network-instances/network-instance/protocols/protocol/bgp/" with KEY = "device"
+name: /network-instances/network-instance/protocols/protocol/bgp/
+key    value
+---    -----
+device 100.123.1.0
+device 100.123.1.1
+device 100.123.1.2
+device 100.123.1.4
+device 100.123.1.5
+device 100.123.1.6
+>
+```
+BGP neighbors address
+```
+> SHOW TAG VALUES FROM  "/network-instances/network-instance/protocols/protocol/bgp/" with KEY = "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address"
+name: /network-instances/network-instance/protocols/protocol/bgp/
+key                                                                                             value
+---                                                                                             -----
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.1.1
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.1.2
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.1.3
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.1.4
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.1.5
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.1.6
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.1.7
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.2.1
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.2.2
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.2.3
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.2.4
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.2.5
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.2.6
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.2.7
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.3.1
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.3.2
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.3.3
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.3.4
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.3.5
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.3.6
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.3.7
+```
+
+BGP neighbors address for device 100.123.1.0
+```
+> SHOW TAG VALUES FROM  "/network-instances/network-instance/protocols/protocol/bgp/" with KEY = "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address" WHERE device='100.123.1.0'
+name: /network-instances/network-instance/protocols/protocol/bgp/
+key                                                                                             value
+---                                                                                             -----
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.1.1
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.1.3
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.1.5
+/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address 192.168.1.7
+>
+```
+BGP groups name for device 100.123.1.0
+```
+> SHOW TAG VALUES FROM  "/network-instances/network-instance/protocols/protocol/bgp/" with KEY ="/network-instances/network-instance/protocols/protocol/bgp/peer-groups/peer-group/@peer-group-name" WHERE device='100.123.1.0'
+name: /network-instances/network-instance/protocols/protocol/bgp/
+key                                                                                                value
+---                                                                                                -----
+/network-instances/network-instance/protocols/protocol/bgp/peer-groups/peer-group/@peer-group-name underlay
+>
+```
+BGP groups name
+```
+> SHOW TAG VALUES FROM  "/network-instances/network-instance/protocols/protocol/bgp/" with KEY ="/network-instances/network-instance/protocols/protocol/bgp/peer-groups/peer-group/@peer-group-name"
+name: /network-instances/network-instance/protocols/protocol/bgp/
+key                                                                                                value
+---                                                                                                -----
+/network-instances/network-instance/protocols/protocol/bgp/peer-groups/peer-group/@peer-group-name underlay
+>
+```
+Sessions state on device 100.123.1.0
+```
+> SELECT "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state" from "/network-instances/network-instance/protocols/protocol/bgp/" WHERE device='100.123.1.0' ORDER BY DESC LIMIT 4
+name: /network-instances/network-instance/protocols/protocol/bgp/
+time                /network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state
+----                -------------------------------------------------------------------------------------------------
+1545167962424407403 ESTABLISHED
+1545167962424407403 ESTABLISHED
+1545167962424407403 ESTABLISHED
+1545167962424407403 ESTABLISHED
+>
+
+```
+Sessions state
+```
+> SELECT "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state" FROM "/network-instances/network-instance/protocols/protocol/bgp/" ORDER BY DESC LIMIT 10
+name: /network-instances/network-instance/protocols/protocol/bgp/
+time                /network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state
+----                -------------------------------------------------------------------------------------------------
+1545168049575284624 ESTABLISHED
+1545168049575284624 ESTABLISHED
+1545168049575284624 ESTABLISHED
+1545168049575284624 ESTABLISHED
+1545168049092114919 ESTABLISHED
+1545168049092114919 ESTABLISHED
+1545168049092114919 ESTABLISHED
+1545168049092114919 ESTABLISHED
+1545168048906507987 ESTABLISHED
+1545168048906507987 ESTABLISHED
+>
+
+```
 ```
 > select * from "/interfaces/" order by desc limit 1
 ```
