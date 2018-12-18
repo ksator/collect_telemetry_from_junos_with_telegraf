@@ -391,18 +391,36 @@ list measurements for a database
 ResultSet({'(u'measurements', None)': [{u'name': u'/interfaces/'}, {u'name': u'/network-instances/network-instance/protocols/protocol/bgp/'}]})
 ```
 query data from a particular measurement and database
-```
->>> gp = influx_client.query('select * from "/interfaces/"  order by desc limit 2 ', database='juniper').get_points()
->>> for item in gp:
-...     print item['/interfaces/interface/@name']
-...
-ge-0/0/7
-ge-0/0/6
->>> gp = influx_client.query('select * from "/interfaces/"  order by desc limit 2 ', database='juniper').get_points()
->>> for item in gp:
-...     print item['/interfaces/interface/subinterfaces/subinterface/state/counters/in-octets']
-...
-36
-26277618
->>>
 
+```
+>>> gp = influx_client.query("""select "/interfaces/interface/subinterfaces/subinterface/state/counters/in-octets" from "/interfaces/" where "/interfaces/interface/@name" = 'ge-0/0/0' and "device" = '100.123.1.0' order by desc limit 10""", database='juniper').get_points()
+>>> for item in gp:
+...   print item['/interfaces/interface/subinterfaces/subinterface/state/counters/in-octets']                                                  ...
+515548
+515548
+515496
+515496
+515496
+515496
+515496
+515496
+515496
+515496
+```
+```
+>>> gp = influx_client.query("""select "/interfaces/interface/subinterfaces/subinterface/state/counters/in-octets" from "/interfaces/" where "/interfaces/interface/@name" = 'ge-0/0/0' and "device" = '100.123.1.0' order by desc limit 10""", database='juniper').get_points()
+>>> for item in gp:
+...   print item
+...
+{u'/interfaces/interface/subinterfaces/subinterface/state/counters/in-octets': 515671, u'time': u'2018-12-18T22:24:11.94933689Z'}
+{u'/interfaces/interface/subinterfaces/subinterface/state/counters/in-octets': 515671, u'time': u'2018-12-18T22:24:09.748368485Z'}
+{u'/interfaces/interface/subinterfaces/subinterface/state/counters/in-octets': 515619, u'time': u'2018-12-18T22:24:07.742719284Z'}
+{u'/interfaces/interface/subinterfaces/subinterface/state/counters/in-octets': 515619, u'time': u'2018-12-18T22:24:05.742853495Z'}
+{u'/interfaces/interface/subinterfaces/subinterface/state/counters/in-octets': 515619, u'time': u'2018-12-18T22:24:03.542083513Z'}
+{u'/interfaces/interface/subinterfaces/subinterface/state/counters/in-octets': 515619, u'time': u'2018-12-18T22:24:01.537968182Z'}
+{u'/interfaces/interface/subinterfaces/subinterface/state/counters/in-octets': 515619, u'time': u'2018-12-18T22:23:59.338121834Z'}
+{u'/interfaces/interface/subinterfaces/subinterface/state/counters/in-octets': 515619, u'time': u'2018-12-18T22:23:57.338440891Z'}
+{u'/interfaces/interface/subinterfaces/subinterface/state/counters/in-octets': 515619, u'time': u'2018-12-18T22:23:55.328623407Z'}
+{u'/interfaces/interface/subinterfaces/subinterface/state/counters/in-octets': 515619, u'time': u'2018-12-18T22:23:53.128843287Z'}
+>>>
+```
