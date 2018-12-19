@@ -35,13 +35,11 @@ Starting with Junos OS Release 18.3R1:
 
 This setup is using an older Junos release, so it is required to install these two packages. 
 
-Here's some details from the junos devices   
+Here's the details:
 ```
-jcluser@vMX-1> show version | match "na telemetry"
-JUNOS na telemetry [18.2R1.9-C1]
-```
-```
-jcluser@vMX-1> show version | match openconfig
+jcluser@vMX1> show version | match "Junos:|openconfig|na telemetry"
+Junos: 18.2R1.9
+JUNOS na telemetry [18.2R1-S3.2-C1]
 JUNOS Openconfig [0.0.0.10-1]
 ```
 
