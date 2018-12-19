@@ -164,7 +164,7 @@ name: measurements
 name
 ----
 ```
-All devices
+Devices streaming data
 ```
 > SHOW TAG VALUES FROM  "/network-instances/network-instance/protocols/protocol/bgp/" with KEY = "device"
 name: /network-instances/network-instance/protocols/protocol/bgp/
