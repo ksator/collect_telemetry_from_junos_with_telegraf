@@ -4,11 +4,17 @@ collect openconfig telemetry from junos devices using telegraf.
 store collected data in influxdb  
 query influxdb database with cli and python to extract data   
 
-# About telegraf
+# About Telegraf
 
-telegraf is an open source collector written in GO.  
+Telegraf is an open source collector written in GO.  
 Telegraf collects data and writes them into a database.  
 It is plugin-driven (it has input plugins, output plugins, ...)  
+We will use jti_openconfig_telemetry input plugin (grpc client to collect telemetry on junos devices) and influxb output plugin (database to store the data collected)  
+
+
+# About Influxdb
+
+Influxdb is an open source time series database written in GO.
 
 # Requirements 
 
@@ -19,7 +25,17 @@ This is not covered in this repository
 
 ## Junos 
 
-here's some details from the junos devices   
+### Junos packages 
+
+In order to collect data from Junos using openconfig telemetry, the devices require the Junos packages ```openconfig``` and ```network agent```
+
+Starting with Junos OS Release 18.3R1: 
+- the Junos OS image includes the ```OpenConfig``` package; therefore, you do not need anymore to install ```OpenConfig``` separately on your device.  
+- the Junos OS image includes the ```Network Agent```, therefore, you do not need anymore to install the ```network agent``` separately on your device.  
+
+This setup is using an older Junos release, so it is required to install these two packages. 
+
+Here's some details from the junos devices   
 ```
 jcluser@vMX-1> show version | match "na telemetry"
 JUNOS na telemetry [18.2R1.9-C1]
@@ -28,6 +44,9 @@ JUNOS na telemetry [18.2R1.9-C1]
 jcluser@vMX-1> show version | match openconfig
 JUNOS Openconfig [0.0.0.10-1]
 ```
+
+### Junos configuration
+
 ```
 jcluser@vMX-1> show configuration system services netconf | display set
 set system services netconf ssh
@@ -50,7 +69,7 @@ Each yang module has a version (`reference`), this is indicated in the YANG modu
 
 Run this command to show YANG packages installed on Junos: 
 ```
-jcluser@vMX-addr-0> show system yang package
+jcluser@vMX-1> show system yang package
 Package ID            :junos-openconfig
 YANG Module(s)        :iana-if-type.yang ietf-inet-types.yang ietf-interfaces.yang ietf-yang-types.yang jnx-aug-openconfig-bgp.yang jnx-aug-openconfig-if-ip.yang jnx-aug-openconfig-interfaces.yang jnx-aug-openconfig-isis.yang jnx-aug-openconfig-lacp.yang jnx-aug-openconfig-lldp.yang jnx-aug-openconfig-local-routing.yang jnx-aug-openconfig-mpls.yang jnx-aug-openconfig-ni.yang jnx-aug-openconfig-routing-policy.yang jnx-openconfig-dev.yang junos-extension.yang openconfig-bgp-common-multiprotocol.yang openconfig-bgp-common-structure.yang openconfig-bgp-common.yang openconfig-bgp-global.yang openconfig-bgp-neighbor.yang openconfig-bgp-peer-group.yang openconfig-bgp-policy.yang openconfig-bgp-types.yang openconfig-bgp.yang openconfig-extensions.yang openconfig-if-aggregate.yang openconfig-if-ethernet.yang openconfig-if-ip-ext.yang openconfig-if-ip.yang openconfig-inet-types.yang openconfig-interfaces.yang openconfig-isis-lsdb-types.yang openconfig-isis-lsp.yang openconfig-isis-policy.yang openconfig-isis-routing.yang openconfig-isis-types.yang openconfig-isis.yang openconfig-lacp.yang openconfig-lldp-types.yang openconfig-lldp.yang openconfig-local-routing.yang openconfig-mpls-igp.yang openconfig-mpls-ldp.yang openconfig-mpls-rsvp.yang openconfig-mpls-sr.yang openconfig-mpls-static.yang openconfig-mpls-te.yang openconfig-mpls-types.yang openconfig-mpls.yang openconfig-network-instance-l2.yang openconfig-network-instance-l3.yang openconfig-network-instance-types.yang openconfig-network-instance.yang openconfig-platform-transceiver.yang openconfig-platform-types.yang openconfig-platform.yang openconfig-policy-types.yang openconfig-rib-bgp-ext.yang openconfig-rib-bgp-types.yang openconfig-rib-bgp.yang openconfig-routing-policy.yang openconfig-segment-routing.yang openconfig-terminal-device.yang openconfig-transport-types.yang openconfig-types.yang openconfig-vlan-types.yang openconfig-vlan.yang openconfig-yang-types.yang
 Translation Script(s) :openconfig-bgp.slax openconfig-interface.slax openconfig-lldp.slax openconfig-local-routing.slax openconfig-mpls.slax openconfig-network-instance.slax openconfig-ni-bgp.slax openconfig-ni-mpls.slax openconfig-policy.slax openconfig-vlan.slax
@@ -58,7 +77,7 @@ Translation script status is enabled
 ```
 Run this command to list YANG modules available on Junos: 
 ```
-jcluser@vMX-addr-0> file list /opt/yang-pkg/junos-openconfig/yang/
+jcluser@vMX-1> file list /opt/yang-pkg/junos-openconfig/yang/
 
 /opt/yang-pkg/junos-openconfig/yang/:
 deviation/
@@ -135,11 +154,11 @@ openconfig-yang-types.yang
 Run this command to know which `reference` of a YANG module is used on a Junos device.   
 Example with openconfig-interfaces.yang YANG module
 ```
-jcluser@vMX-addr-0> file more /opt/yang-pkg/junos-openconfig/yang/openconfig-interfaces.yang
+jcluser@vMX-1> file more /opt/yang-pkg/junos-openconfig/yang/openconfig-interfaces.yang
 ```
 Run this command to understand which YANG deviations are used on a Junos device:
 ```
-jcluser@vMX-addr-0> file more /opt/yang-pkg/junos-openconfig/yang/jnx-openconfig-dev.yang
+jcluser@vMX-1> file more /opt/yang-pkg/junos-openconfig/yang/jnx-openconfig-dev.yang
 ```
 
 ## Pyang
