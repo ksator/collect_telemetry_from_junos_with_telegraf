@@ -1,18 +1,18 @@
-# about this repo
+# About this repo
 
 collect openconfig telemetry from junos devices using telegraf.  
 store collected data in influxdb  
 query influxdb database with cli and python to extract data   
 
-# about telegraf
+# About telegraf
 
 telegraf is an open source collector written in GO.  
 Telegraf collects data and writes them into a database.  
 It is plugin-driven (it has input plugins, output plugins, ...)  
 
-# requirements 
+# Requirements 
 
-## docker
+## Docker
 
 you need to install docker.  
 This is not covered in this repository
@@ -39,7 +39,278 @@ set system services extension-service request-response grpc skip-authentication
 set system services extension-service notification allow-clients address 0.0.0.0/0
 ```
 
-# influxdb
+# YANG modules
+
+## OpenConfig YANG modules on Github
+
+Openconfig yang modules https://github.com/openconfig/public/tree/master/release/models  
+Each yang module has a version (`reference`), this is indicated in the YANG module
+
+## YANG modules on Junos
+
+Run this command to show YANG packages installed on Junos: 
+```
+jcluser@vMX-addr-0> show system yang package
+Package ID            :junos-openconfig
+YANG Module(s)        :iana-if-type.yang ietf-inet-types.yang ietf-interfaces.yang ietf-yang-types.yang jnx-aug-openconfig-bgp.yang jnx-aug-openconfig-if-ip.yang jnx-aug-openconfig-interfaces.yang jnx-aug-openconfig-isis.yang jnx-aug-openconfig-lacp.yang jnx-aug-openconfig-lldp.yang jnx-aug-openconfig-local-routing.yang jnx-aug-openconfig-mpls.yang jnx-aug-openconfig-ni.yang jnx-aug-openconfig-routing-policy.yang jnx-openconfig-dev.yang junos-extension.yang openconfig-bgp-common-multiprotocol.yang openconfig-bgp-common-structure.yang openconfig-bgp-common.yang openconfig-bgp-global.yang openconfig-bgp-neighbor.yang openconfig-bgp-peer-group.yang openconfig-bgp-policy.yang openconfig-bgp-types.yang openconfig-bgp.yang openconfig-extensions.yang openconfig-if-aggregate.yang openconfig-if-ethernet.yang openconfig-if-ip-ext.yang openconfig-if-ip.yang openconfig-inet-types.yang openconfig-interfaces.yang openconfig-isis-lsdb-types.yang openconfig-isis-lsp.yang openconfig-isis-policy.yang openconfig-isis-routing.yang openconfig-isis-types.yang openconfig-isis.yang openconfig-lacp.yang openconfig-lldp-types.yang openconfig-lldp.yang openconfig-local-routing.yang openconfig-mpls-igp.yang openconfig-mpls-ldp.yang openconfig-mpls-rsvp.yang openconfig-mpls-sr.yang openconfig-mpls-static.yang openconfig-mpls-te.yang openconfig-mpls-types.yang openconfig-mpls.yang openconfig-network-instance-l2.yang openconfig-network-instance-l3.yang openconfig-network-instance-types.yang openconfig-network-instance.yang openconfig-platform-transceiver.yang openconfig-platform-types.yang openconfig-platform.yang openconfig-policy-types.yang openconfig-rib-bgp-ext.yang openconfig-rib-bgp-types.yang openconfig-rib-bgp.yang openconfig-routing-policy.yang openconfig-segment-routing.yang openconfig-terminal-device.yang openconfig-transport-types.yang openconfig-types.yang openconfig-vlan-types.yang openconfig-vlan.yang openconfig-yang-types.yang
+Translation Script(s) :openconfig-bgp.slax openconfig-interface.slax openconfig-lldp.slax openconfig-local-routing.slax openconfig-mpls.slax openconfig-network-instance.slax openconfig-ni-bgp.slax openconfig-ni-mpls.slax openconfig-policy.slax openconfig-vlan.slax
+Translation script status is enabled
+```
+Run this command to list YANG modules available on Junos: 
+```
+jcluser@vMX-addr-0> file list /opt/yang-pkg/junos-openconfig/yang/
+
+/opt/yang-pkg/junos-openconfig/yang/:
+deviation/
+iana-if-type.yang
+ietf-inet-types.yang
+ietf-interfaces.yang
+ietf-yang-types.yang
+jnx-aug-openconfig-bgp.yang
+jnx-aug-openconfig-if-ip.yang
+jnx-aug-openconfig-interfaces.yang
+jnx-aug-openconfig-isis.yang
+jnx-aug-openconfig-lacp.yang
+jnx-aug-openconfig-lldp.yang
+jnx-aug-openconfig-local-routing.yang
+jnx-aug-openconfig-mpls.yang
+jnx-aug-openconfig-ni.yang
+jnx-aug-openconfig-routing-policy.yang
+jnx-openconfig-dev.yang@ -> /opt/yang-pkg/junos-openconfig/yang/deviation/jnx-openconfig-dev.yang
+junos-extension.yang
+openconfig-bgp-common-multiprotocol.yang
+openconfig-bgp-common-structure.yang
+openconfig-bgp-common.yang
+openconfig-bgp-global.yang
+openconfig-bgp-neighbor.yang
+openconfig-bgp-peer-group.yang
+openconfig-bgp-policy.yang
+openconfig-bgp-types.yang
+openconfig-bgp.yang
+openconfig-extensions.yang
+openconfig-if-aggregate.yang
+openconfig-if-ethernet.yang
+openconfig-if-ip-ext.yang
+openconfig-if-ip.yang
+openconfig-inet-types.yang
+openconfig-interfaces.yang
+openconfig-isis-lsdb-types.yang
+openconfig-isis-lsp.yang
+openconfig-isis-policy.yang
+openconfig-isis-routing.yang
+openconfig-isis-types.yang
+openconfig-isis.yang
+openconfig-lacp.yang
+openconfig-lldp-types.yang
+openconfig-lldp.yang
+openconfig-local-routing.yang
+openconfig-mpls-igp.yang
+openconfig-mpls-ldp.yang
+openconfig-mpls-rsvp.yang
+openconfig-mpls-sr.yang
+openconfig-mpls-static.yang
+openconfig-mpls-te.yang
+openconfig-mpls-types.yang
+openconfig-mpls.yang
+openconfig-network-instance-l2.yang
+openconfig-network-instance-l3.yang
+openconfig-network-instance-types.yang
+openconfig-network-instance.yang
+openconfig-platform-transceiver.yang
+openconfig-platform-types.yang
+openconfig-platform.yang
+openconfig-policy-types.yang
+openconfig-rib-bgp-ext.yang
+openconfig-rib-bgp-types.yang
+openconfig-rib-bgp.yang
+openconfig-routing-policy.yang
+openconfig-segment-routing.yang
+openconfig-terminal-device.yang
+openconfig-transport-types.yang
+openconfig-types.yang
+openconfig-vlan-types.yang
+openconfig-vlan.yang
+openconfig-yang-types.yang
+```
+Run this command to know which `reference` of a YANG module is used on a Junos device.   
+Example with openconfig-interfaces.yang YANG module
+```
+jcluser@vMX-addr-0> file more /opt/yang-pkg/junos-openconfig/yang/openconfig-interfaces.yang
+```
+Run this command to understand which YANG deviations are used on a Junos device:
+```
+jcluser@vMX-addr-0> file more /opt/yang-pkg/junos-openconfig/yang/jnx-openconfig-dev.yang
+```
+
+## Pyang
+
+You can use pyang to:
+ - Validate YANG modules against YANG RFCs
+ - Convert YANG modules into equivalent YIN module (XML).
+ - Generate a tree representation of YANG models for quick visualization.
+
+### Pyang installation
+
+pyang installation from pypi: 
+```
+$ pip install pyang
+```
+
+
+### validate yang modules
+
+Example: let's validate the modules openconfig-bgp.yang and openconfig-interfaces.yang from openconfig github repository
+
+#### Get Openconfig yang modules 
+clone the openconfig repository
+```
+$ git clone https://github.com/openconfig/public.git
+$ ls public
+```
+#### move all the yang files from Openconfig to the same directory
+
+The YANG modules openconfig-bgp.yang and openconfig-interfaces.yang import other YANG modules: so we need to make sure pyang can find all these yang modules 
+
+move all the yang files to the directory yang_modules
+```
+$ mkdir yang_modules
+$ cp public/release/models/*.yang yang_modules/.
+$ cp -R public/release/models/*/*.yang yang_modules/.
+$ ls yang_modules
+$ cd yang_modules
+```
+
+#### validate yang modules
+
+```
+$ pyang openconfig-bgp.yang
+$ pyang openconfig-interfaces.yang 
+```
+
+### Generate a tree representation of YANG modules for quick visualization
+
+```
+$ pyang -f tree openconfig-bgp.yang 
+```
+```
+$ pyang -f tree openconfig-interfaces.yang
+```
+```
+$ pyang openconfig-interfaces.yang -f tree --tree-path=/interfaces/interface/state
+module: openconfig-interfaces
+  +--rw interfaces
+     +--rw interface* [name]
+        +--ro state
+           +--ro name?            string
+           +--ro type             identityref
+           +--ro mtu?             uint16
+           +--ro loopback-mode?   boolean
+           +--ro description?     string
+           +--ro enabled?         boolean
+           +--ro ifindex?         uint32
+           +--ro admin-status     enumeration
+           +--ro oper-status      enumeration
+           +--ro last-change?     oc-types:timeticks64
+           +--ro logical?         boolean
+           +--ro counters
+              +--ro in-octets?             oc-yang:counter64
+              +--ro in-pkts?               oc-yang:counter64
+              +--ro in-unicast-pkts?       oc-yang:counter64
+              +--ro in-broadcast-pkts?     oc-yang:counter64
+              +--ro in-multicast-pkts?     oc-yang:counter64
+              +--ro in-discards?           oc-yang:counter64
+              +--ro in-errors?             oc-yang:counter64
+              +--ro in-unknown-protos?     oc-yang:counter64
+              +--ro in-fcs-errors?         oc-yang:counter64
+              +--ro out-octets?            oc-yang:counter64
+              +--ro out-pkts?              oc-yang:counter64
+              +--ro out-unicast-pkts?      oc-yang:counter64
+              +--ro out-broadcast-pkts?    oc-yang:counter64
+              +--ro out-multicast-pkts?    oc-yang:counter64
+              +--ro out-discards?          oc-yang:counter64
+              +--ro out-errors?            oc-yang:counter64
+              +--ro carrier-transitions?   oc-yang:counter64
+              +--ro last-clear?            oc-types:timeticks64
+```
+Old openconfig BGP path, used by Junos 16.1R3 to 17.2
+```
+$ pyang openconfig-bgp.yang -f tree --tree-path=/bgp/neighbors/neighbor/state --tree-depth=5
+module: openconfig-bgp
+  +--rw bgp
+     +--rw neighbors
+        +--rw neighbor* [neighbor-address]
+           +--ro state
+              +--ro peer-group?                -> ../../../../peer-groups/peer-group/peer-group-name
+              +--ro neighbor-address?          oc-inet:ip-address
+              +--ro enabled?                   boolean
+              +--ro peer-as?                   oc-inet:as-number
+              +--ro local-as?                  oc-inet:as-number
+              +--ro peer-type?                 oc-bgp-types:peer-type
+              +--ro auth-password?             oc-types:routing-password
+              +--ro remove-private-as?         oc-bgp-types:remove-private-as-option
+              +--ro route-flap-damping?        boolean
+              +--ro send-community?            oc-bgp-types:community-type
+              +--ro description?               string
+              +--ro session-state?             enumeration
+              +--ro last-established?          oc-types:timeticks64
+              +--ro established-transitions?   oc-yang:counter64
+              +--ro supported-capabilities*    identityref
+              +--ro messages
+              |     ...
+              +--ro queues
+              |     ...
+              +--ro dynamically-configured?    boolean
+
+```
+New openconfig BGP path, used from Junos 17.3
+
+```
+$ pyang openconfig-network-instance.yang --tree-path=/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state -f tree
+module: openconfig-network-instance
+  +--rw network-instances
+     +--rw network-instance* [name]
+        +--rw protocols
+           +--rw protocol* [identifier name]
+              +--rw bgp
+                 +--rw neighbors
+                    +--rw neighbor* [neighbor-address]
+                       +--ro state
+                          +--ro peer-group?                -> ../../../../peer-groups/peer-group/peer-group-name
+                          +--ro neighbor-address?          oc-inet:ip-address
+                          +--ro enabled?                   boolean
+                          +--ro peer-as?                   oc-inet:as-number
+                          +--ro local-as?                  oc-inet:as-number
+                          +--ro peer-type?                 oc-bgp-types:peer-type
+                          +--ro auth-password?             oc-types:routing-password
+                          +--ro remove-private-as?         oc-bgp-types:remove-private-as-option
+                          +--ro route-flap-damping?        boolean
+                          +--ro send-community?            oc-bgp-types:community-type
+                          +--ro description?               string
+                          +--ro session-state?             enumeration
+                          +--ro last-established?          oc-types:timeticks64
+                          +--ro established-transitions?   oc-yang:counter64
+                          +--ro supported-capabilities*    identityref
+                          +--ro messages
+                          |  +--ro sent
+                          |  |  +--ro UPDATE?                            uint64
+                          |  |  +--ro NOTIFICATION?                      uint64
+                          |  |  +--ro last-notification-time?            oc-types:timeticks64
+                          |  |  +--ro last-notification-error-code?      identityref
+                          |  |  +--ro last-notification-error-subcode?   identityref
+                          |  +--ro received
+                          |     +--ro UPDATE?                            uint64
+                          |     +--ro NOTIFICATION?                      uint64
+                          |     +--ro last-notification-time?            oc-types:timeticks64
+                          |     +--ro last-notification-error-code?      identityref
+                          |     +--ro last-notification-error-subcode?   identityref
+                          +--ro queues
+                          |  +--ro input?    uint32
+                          |  +--ro output?   uint32
+                          +--ro dynamically-configured?    boolean
+```
+
+
+# Influxdb
 
 pull docker images 
 ```
@@ -95,7 +366,7 @@ exit the influxdb container
 # exit
 ```
 
-# telegraf
+# Telegraf
 
 get ip address used by containers
 ```
