@@ -558,28 +558,31 @@ time                /network-instances/network-instance/protocols/protocol/bgp/n
 ```
 Operational state of interface ge-0/0/0 of device 100.123.1.0
 ```
-> SELECT "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0' AND "/interfaces/interface/@name" = 'ge-0/0/0' AND "/interfaces/interface/state/oper-status" = 'UP') ORDER BY DESC LIMIT 5
+> SELECT "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0' AND "/interfaces/interface/@name" = 'ge-0/0/0') ORDER BY DESC LIMIT 5
+
 name: /interfaces/
 time                /interfaces/interface/state/oper-status
 ----                ---------------------------------------
-1545505895528360658 UP
-1545505893529000291 UP
-1545505891515823104 UP
-1545505889443348550 UP
-1545505887437980580 UP
+1545509051382376417 UP
+1545509049380405421 UP
+1545509047375537713 UP
+1545509045381427110 UP
+1545509043383978527 UP
+>
 ```
 Operational state of interface ge-0/0/0 of device 100.123.1.0 since 10 seconds
 ```
-> SELECT "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0' AND "/interfaces/interface/@name" = 'ge-0/0/0' AND "/interfaces/interface/state/oper-status" = 'UP' AND time >= now() - 10s)
+> SELECT "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0' AND "/interfaces/interface/@name" = 'ge-0/0/0' AND time >= now() - 10s)
 name: /interfaces/
 time                /interfaces/interface/state/oper-status
 ----                ---------------------------------------
-1545506127609492045 UP
-1545506129602754473 UP
-1545506131607695707 UP
-1545506133615007174 UP
-1545506135612608747 UP
+1545509121410200442 UP
+1545509123420184616 UP
+1545509125424987662 UP
+1545509127438874766 UP
+1545509129430320588 UP
 >
+
 ```
 Total prefixes on device 100.123.1.4
 ```
@@ -600,78 +603,105 @@ time                mean
 1545168168469112825 44
 >
 ```
-Interface name and interface admin status for device 100.123.1.0 and interfaces ge-.* since 10 seconds
+Interface name and interface operational status for device 100.123.1.0 and interfaces ge-.* since 10 seconds
 ```
-> SELECT "/interfaces/interface/@name", "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0' AND "/interfaces/interface/state/admin-status" = 'UP' AND "/interfaces/interface/state/oper-status" = 'UP' AND "/interfaces/interface/@name" =~ /ge-.*/ AND time >= now() - 10s)
+> SELECT "/interfaces/interface/@name", "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0'  AND "/interfaces/interface/@name" =~ /ge-.*/ AND time >= now() - 10s)
 name: /interfaces/
 time                /interfaces/interface/@name /interfaces/interface/state/oper-status
 ----                --------------------------- ---------------------------------------
-1545506733946266092 ge-0/0/0                    UP
-1545506734037137988 ge-0/0/1                    UP
-1545506734037137988 ge-0/0/2                    UP
-1545506734037137988 ge-0/0/3                    UP
-1545506735944334095 ge-0/0/0                    UP
-1545506736038845016 ge-0/0/1                    UP
-1545506736038845016 ge-0/0/2                    UP
-1545506736038845016 ge-0/0/3                    UP
-1545506737958130826 ge-0/0/0                    UP
-1545506738039645695 ge-0/0/1                    UP
-1545506738039645695 ge-0/0/2                    UP
-1545506738039645695 ge-0/0/3                    UP
-1545506739953288447 ge-0/0/0                    UP
-1545506740045603934 ge-0/0/1                    UP
-1545506740045603934 ge-0/0/2                    UP
-1545506740045603934 ge-0/0/3                    UP
+1545509175480107525 ge-0/0/0                    UP
+1545509175569647708 ge-0/0/1                    UP
+1545509175569647708 ge-0/0/2                    UP
+1545509175569647708 ge-0/0/3                    UP
+1545509175569647708 ge-0/0/4                    DOWN
+1545509175569647708 ge-0/0/5                    DOWN
+1545509175569647708 ge-0/0/6                    DOWN
+1545509175569647708 ge-0/0/7                    DOWN
+1545509177480040059 ge-0/0/0                    UP
+1545509177573224527 ge-0/0/1                    UP
+1545509177573224527 ge-0/0/2                    UP
+1545509177573224527 ge-0/0/3                    UP
+1545509177573224527 ge-0/0/4                    DOWN
+1545509177573224527 ge-0/0/5                    DOWN
+1545509177573224527 ge-0/0/6                    DOWN
+1545509177573224527 ge-0/0/7                    DOWN
+1545509179478242702 ge-0/0/0                    UP
+1545509179573647826 ge-0/0/1                    UP
+1545509179573647826 ge-0/0/2                    UP
+1545509179573647826 ge-0/0/3                    UP
+1545509179573647826 ge-0/0/4                    DOWN
+1545509179573647826 ge-0/0/5                    DOWN
+1545509179573647826 ge-0/0/6                    DOWN
+1545509179573647826 ge-0/0/7                    DOWN
+1545509181487813525 ge-0/0/0                    UP
+1545509181587707508 ge-0/0/1                    UP
+1545509181587707508 ge-0/0/2                    UP
+1545509181587707508 ge-0/0/3                    UP
+1545509181587707508 ge-0/0/4                    DOWN
+1545509181587707508 ge-0/0/5                    DOWN
+1545509181587707508 ge-0/0/6                    DOWN
+1545509181587707508 ge-0/0/7                    DOWN
+>
 
 ```
-Interface name and interface admin status for device 100.123.1.0 and interfaces ge-0/0.* since 10 seconds
+Interface name and interface operational status, for device 100.123.1.0, and interfaces ge-0/0.* that are administratively up, since 10 seconds
 
 ```
-> SELECT "/interfaces/interface/@name", "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0' AND "/interfaces/interface/state/admin-status" = 'UP' AND "/interfaces/interface/state/oper-status" = 'UP' AND "/interfaces/interface/@name" =~ /ge-0\/0\/.*/ AND time >= now() - 10s)
+> SELECT "/interfaces/interface/@name", "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0' AND "/interfaces/interface/state/admin-status" = 'UP' AND "/interfaces/interface/@name" =~ /ge-0\/0\/.*/ AND time >= now() - 10s)
 name: /interfaces/
 time                /interfaces/interface/@name /interfaces/interface/state/oper-status
 ----                --------------------------- ---------------------------------------
-1545507776593328861 ge-0/0/0                    UP
-1545507776687462300 ge-0/0/1                    UP
-1545507776687462300 ge-0/0/2                    UP
-1545507776687462300 ge-0/0/3                    UP
-1545507778619664470 ge-0/0/0                    UP
-1545507778708848183 ge-0/0/1                    UP
-1545507778708848183 ge-0/0/2                    UP
-1545507778708848183 ge-0/0/3                    UP
-1545507780621827328 ge-0/0/0                    UP
-1545507780706864651 ge-0/0/1                    UP
-1545507780706864651 ge-0/0/2                    UP
-1545507780706864651 ge-0/0/3                    UP
-1545507782583227468 ge-0/0/0                    UP
-1545507782775545856 ge-0/0/1                    UP
-1545507782775545856 ge-0/0/2                    UP
-1545507782775545856 ge-0/0/3                    UP
+1545509255590864765 ge-0/0/0                    UP
+1545509255675161930 ge-0/0/1                    UP
+1545509255675161930 ge-0/0/2                    UP
+1545509255675161930 ge-0/0/3                    UP
+1545509255675161930 ge-0/0/4                    DOWN
+1545509255675161930 ge-0/0/5                    DOWN
+1545509255675161930 ge-0/0/6                    DOWN
+1545509255675161930 ge-0/0/7                    DOWN
+1545509257598029805 ge-0/0/0                    UP
+1545509257682328351 ge-0/0/1                    UP
+1545509257682328351 ge-0/0/2                    UP
+1545509257682328351 ge-0/0/3                    UP
+1545509257682328351 ge-0/0/4                    DOWN
+1545509257682328351 ge-0/0/5                    DOWN
+1545509257682328351 ge-0/0/6                    DOWN
+1545509257682328351 ge-0/0/7                    DOWN
+1545509259627849576 ge-0/0/0                    UP
+1545509259712200623 ge-0/0/1                    UP
+1545509259712200623 ge-0/0/2                    UP
+1545509259712200623 ge-0/0/3                    UP
+1545509259712200623 ge-0/0/4                    DOWN
+1545509259712200623 ge-0/0/5                    DOWN
+1545509259712200623 ge-0/0/6                    DOWN
+1545509259712200623 ge-0/0/7                    DOWN
+1545509261528627793 ge-0/0/0                    UP
+1545509261726859639 ge-0/0/1                    UP
+1545509261726859639 ge-0/0/2                    UP
+1545509261726859639 ge-0/0/3                    UP
+1545509261726859639 ge-0/0/4                    DOWN
+1545509261726859639 ge-0/0/5                    DOWN
+1545509261726859639 ge-0/0/6                    DOWN
+1545509261726859639 ge-0/0/7                    DOWN
 >
 
 ```
 Interface name and interface admin status for device 100.123.1.0 and interfaces ge-0/0/0, ge-0/0/1, ge-0/0/2  since 10 seconds
 
 ```
-> SELECT "/interfaces/interface/@name", "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0' AND "/interfaces/interface/state/admin-status" = 'UP' AND "/interfaces/interface/state/oper-status" = 'UP' AND "/interfaces/interface/@name" =~ /ge-0\/0\/(0|1|2)/ AND time >= now() - 10s)
+> SELECT "/interfaces/interface/@name", "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0'  AND "/interfaces/interface/@name" =~ /ge-0\/0\/(0|1|2)/ AND time >= now() - 10s)
 name: /interfaces/
 time                /interfaces/interface/@name /interfaces/interface/state/oper-status
 ----                --------------------------- ---------------------------------------
-1545508026776253512 ge-0/0/0                    UP
-1545508026854306960 ge-0/0/1                    UP
-1545508026854306960 ge-0/0/2                    UP
-1545508028771000622 ge-0/0/0                    UP
-1545508028869365473 ge-0/0/1                    UP
-1545508028869365473 ge-0/0/2                    UP
-1545508030775402549 ge-0/0/0                    UP
-1545508030865416828 ge-0/0/1                    UP
-1545508030865416828 ge-0/0/2                    UP
-1545508032771430534 ge-0/0/0                    UP
-1545508032869601640 ge-0/0/1                    UP
-1545508032869601640 ge-0/0/2                    UP
-1545508034769884167 ge-0/0/0                    UP
-1545508034853624454 ge-0/0/1                    UP
-1545508034853624454 ge-0/0/2                    UP
+1545509377592662831 ge-0/0/0                    UP
+1545509377686155325 ge-0/0/1                    UP
+1545509377686155325 ge-0/0/2                    UP
+1545509379590717898 ge-0/0/0                    UP
+1545509379680932343 ge-0/0/1                    UP
+1545509379680932343 ge-0/0/2                    UP
+1545509381592145932 ge-0/0/0                    UP
+1545509381685188921 ge-0/0/1                    UP
+1545509381685188921 ge-0/0/2                    UP
 >
 
 ```
