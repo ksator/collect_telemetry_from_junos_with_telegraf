@@ -602,7 +602,7 @@ time                mean
 ```
 Interface name and interface admin status for device 100.123.1.0 and interfaces ge-.* since 10 seconds
 ```
-> SELECT "/interfaces/interface/@name", "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0' AND "/interfaces/interface/state/admin-status" = 'UP' AND "/interfaces/interface/state/oper-status" = 'UP' AND "/interfaces/interface/@name" =~ /ge-(.*)/ AND time >= now() - 10s)
+> SELECT "/interfaces/interface/@name", "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0' AND "/interfaces/interface/state/admin-status" = 'UP' AND "/interfaces/interface/state/oper-status" = 'UP' AND "/interfaces/interface/@name" =~ /ge-.*/ AND time >= now() - 10s)
 name: /interfaces/
 time                /interfaces/interface/@name /interfaces/interface/state/oper-status
 ----                --------------------------- ---------------------------------------
@@ -622,6 +622,32 @@ time                /interfaces/interface/@name /interfaces/interface/state/oper
 1545506740045603934 ge-0/0/1                    UP
 1545506740045603934 ge-0/0/2                    UP
 1545506740045603934 ge-0/0/3                    UP
+
+```
+Interface name and interface admin status for device 100.123.1.0 and interfaces ge-0/0.* since 10 seconds
+
+```
+> SELECT "/interfaces/interface/@name", "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0' AND "/interfaces/interface/state/admin-status" = 'UP' AND "/interfaces/interface/state/oper-status" = 'UP' AND "/interfaces/interface/@name" =~ /ge-0\/0\/.*/ AND time >= now() - 10s)
+name: /interfaces/
+time                /interfaces/interface/@name /interfaces/interface/state/oper-status
+----                --------------------------- ---------------------------------------
+1545507776593328861 ge-0/0/0                    UP
+1545507776687462300 ge-0/0/1                    UP
+1545507776687462300 ge-0/0/2                    UP
+1545507776687462300 ge-0/0/3                    UP
+1545507778619664470 ge-0/0/0                    UP
+1545507778708848183 ge-0/0/1                    UP
+1545507778708848183 ge-0/0/2                    UP
+1545507778708848183 ge-0/0/3                    UP
+1545507780621827328 ge-0/0/0                    UP
+1545507780706864651 ge-0/0/1                    UP
+1545507780706864651 ge-0/0/2                    UP
+1545507780706864651 ge-0/0/3                    UP
+1545507782583227468 ge-0/0/0                    UP
+1545507782775545856 ge-0/0/1                    UP
+1545507782775545856 ge-0/0/2                    UP
+1545507782775545856 ge-0/0/3                    UP
+>
 
 ```
 Sessions state and total prefixes
