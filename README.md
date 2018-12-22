@@ -556,6 +556,18 @@ time                /network-instances/network-instance/protocols/protocol/bgp/n
 1545168048906507987 ESTABLISHED
 >
 ```
+Operational state of interface ge-0/0/0 of device 100.123.1.0
+```
+> SELECT "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0' AND "/interfaces/interface/@name" = 'ge-0/0/0' AND "/interfaces/interface/state/oper-status" = 'UP') ORDER BY DESC LIMIT 5
+name: /interfaces/
+time                /interfaces/interface/state/oper-status
+----                ---------------------------------------
+1545505895528360658 UP
+1545505893529000291 UP
+1545505891515823104 UP
+1545505889443348550 UP
+1545505887437980580 UP
+```
 Total prefixes on device 100.123.1.4
 ```
 > SELECT MEAN("/network-instances/network-instance/protocols/protocol/bgp/global/state/total-prefixes") FROM "/network-instances/network-instance/protocols/protocol/bgp/" WHERE "device" = '100.123.1.4'
@@ -564,6 +576,20 @@ time mean
 ---- ----
 0    36
 >
+```
+Total prefixes on device 100.123.1.4 since 10 seconds
+```
+> SELECT "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0' AND "/interfaces/interface/@name" = 'ge-0/0/0' AND "/interfaces/interface/state/oper-status" = 'UP' AND time >= now() - 10s)
+name: /interfaces/
+time                /interfaces/interface/state/oper-status
+----                ---------------------------------------
+1545506127609492045 UP
+1545506129602754473 UP
+1545506131607695707 UP
+1545506133615007174 UP
+1545506135612608747 UP
+>
+
 ```
 Total prefixes on device 100.123.1.0 since one minute
 ```
