@@ -650,6 +650,31 @@ time                /interfaces/interface/@name /interfaces/interface/state/oper
 >
 
 ```
+Interface name and interface admin status for device 100.123.1.0 and interfaces ge-0/0/0, ge-0/0/1, ge-0/0/2  since 10 seconds
+
+```
+> SELECT "/interfaces/interface/@name", "/interfaces/interface/state/oper-status" FROM /interfaces/ WHERE ("device" = '100.123.1.0' AND "/interfaces/interface/state/admin-status" = 'UP' AND "/interfaces/interface/state/oper-status" = 'UP' AND "/interfaces/interface/@name" =~ /ge-0\/0\/(0|1|2)/ AND time >= now() - 10s)
+name: /interfaces/
+time                /interfaces/interface/@name /interfaces/interface/state/oper-status
+----                --------------------------- ---------------------------------------
+1545508026776253512 ge-0/0/0                    UP
+1545508026854306960 ge-0/0/1                    UP
+1545508026854306960 ge-0/0/2                    UP
+1545508028771000622 ge-0/0/0                    UP
+1545508028869365473 ge-0/0/1                    UP
+1545508028869365473 ge-0/0/2                    UP
+1545508030775402549 ge-0/0/0                    UP
+1545508030865416828 ge-0/0/1                    UP
+1545508030865416828 ge-0/0/2                    UP
+1545508032771430534 ge-0/0/0                    UP
+1545508032869601640 ge-0/0/1                    UP
+1545508032869601640 ge-0/0/2                    UP
+1545508034769884167 ge-0/0/0                    UP
+1545508034853624454 ge-0/0/1                    UP
+1545508034853624454 ge-0/0/2                    UP
+>
+
+```
 Sessions state and total prefixes
 ```
 > SELECT "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state",  "/network-instances/network-instance/protocols/protocol/bgp/global/state/total-prefixes" FROM "/network-instances/network-instance/protocols/protocol/bgp/" ORDER BY DESC LIMIT 4
