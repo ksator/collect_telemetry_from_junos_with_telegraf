@@ -370,11 +370,11 @@ name
 ----
 _internal
 juniper
->  CREATE USER "juniper" WITH PASSWORD 'juniper'
+> CREATE USER "juniper" WITH PASSWORD 'juniper'
 > show users
 user   admin
 ----   -----
-influx false
+juniper false
 > exit
 # 
 ```
@@ -399,7 +399,7 @@ Verify
 $ docker images telegraf
 ```
 create a telegraf configuration file ([use this file](telegraf.conf))  
-it will use jti_openconfig_telemetry input plugin (grpc client to collect telemetry on junos devices) and influxb output plugin (database to store the data collected)  
+it will use `jti_openconfig_telemetry` input plugin (grpc client to collect telemetry on junos devices) and `influxdb` output plugin (database to store the data collected)  
 
 ```
 $ vi telegraf.conf
